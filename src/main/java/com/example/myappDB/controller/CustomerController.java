@@ -37,6 +37,7 @@ public class CustomerController {
 			return new ResponseEntity<Customer>(customerService.getCustomerById(id), HttpStatus.OK);
 	}
 	
+	// filter customer by branch
 	@GetMapping("/customers/branch/{branch}") 
 	public ResponseEntity<List<Customer>> findCustomerByBranch(@PathVariable String branch) {
 		return new ResponseEntity<List<Customer>>(customerService.getCustomerByBranch(branch), HttpStatus.OK);
