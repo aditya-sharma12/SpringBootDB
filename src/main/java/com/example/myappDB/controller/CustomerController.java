@@ -28,8 +28,16 @@ public class CustomerController {
 		return new ResponseEntity<List<Customer>>(customerService.getAllCustomers(), HttpStatus.OK);
 	}
 
-	@GetMapping("/customers/{id}")
-	public ResponseEntity<Customer> findCustomerById(@PathVariable Integer id) {
+	@GetMapping("/customers/{customer_id}")
+	public ResponseEntity<Customer> findCustomerById(@PathVariable String customer_id) {
+		Integer id;
+		try {
+		   id = Integer.parseInt(customer_id);
+		}
+		catch (NumberFormatException e) {
+		   throw new ApiRequestException("Id should be numeric!!");
+		}
+		
 		if(customerService.getCustomerById(id) == null) 
 			throw new ApiRequestException("Customer Not Found!!");
 		
@@ -49,10 +57,18 @@ public class CustomerController {
 		return new ResponseEntity<String>("Customer Added Successfully!!", HttpStatus.CREATED);
 	} 
 	
-	@PutMapping("/customers/{id}")
-	public ResponseEntity<String> updateCustomer(@PathVariable Integer id, @RequestBody Customer updatedCustomer) {
+	@PutMapping("/customers/{customer_id}")
+	public ResponseEntity<String> updateCustomer(@PathVariable String customer_id, @RequestBody Customer updatedCustomer) {
+		Integer id;
+		try {
+		   id = Integer.parseInt(customer_id);
+		}
+		catch (NumberFormatException e) {
+		   throw new ApiRequestException("Id should be numeric!!");
+		}
+		
 		if(customerService.getCustomerById(id) == null) 
-			return new ResponseEntity<String>("Customer Not Found!!", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Customer Not Found!!", HttpStatus.NOT_FOUND);
 
 		else {
 			customerService.update(id, updatedCustomer);
@@ -60,10 +76,18 @@ public class CustomerController {
 		}
 	} 
 	
-	@DeleteMapping("/customers/{id}")
-	public ResponseEntity<String> deleteCustomer(@PathVariable Integer id) {
+	@DeleteMapping("/customers/{customer_id}")
+	public ResponseEntity<String> deleteCustomer(@PathVariable String customer_id) {
+		Integer id;
+		try {
+		   id = Integer.parseInt(customer_id);
+		}
+		catch (NumberFormatException e) {
+		   throw new ApiRequestException("Id should be numeric!!");
+		}
+		
 		if(customerService.getCustomerById(id) == null) 
-			return new ResponseEntity<String>("Customer Not Found!!", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Customer Not Found!!", HttpStatus.NOT_FOUND);
 		
 		else {
 			customerService.delete(id);

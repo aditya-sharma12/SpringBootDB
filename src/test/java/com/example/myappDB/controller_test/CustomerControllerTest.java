@@ -29,6 +29,7 @@ public class CustomerControllerTest {
 	private static Customer customer;
 	
 	public static final Integer id = 100;
+	public static final String foo = String.valueOf(id);
 	public static final String branch = "Pune";
 	
 	@BeforeClass
@@ -44,7 +45,7 @@ public class CustomerControllerTest {
 	@Test
 	public void findCustomerByIdTest() {
 		when(customerService.getCustomerById(id)).thenReturn(customer);
-		assertEquals(customerController.findCustomerById(id).getBody(), customer);
+		assertEquals(customerController.findCustomerById(foo).getBody(), customer);
 	}
 	
 	@Test
@@ -72,24 +73,24 @@ public class CustomerControllerTest {
 	@Test
 	public void updateCustomerTestWhenCustomerIsNotPresent() {
 		when(customerService.getCustomerById(id)).thenReturn(null);
-		assertEquals(customerController.updateCustomer(id, customer).getStatusCode(), HttpStatus.BAD_REQUEST);
+		assertEquals(customerController.updateCustomer(foo, customer).getStatusCode(), HttpStatus.NOT_FOUND);
 	}
 	
 	@Test
 	public void updateCustomerTestWhenCustomerIsPresent() {
 		when(customerService.getCustomerById(id)).thenReturn(customer);
-		assertEquals(customerController.updateCustomer(id, customer).getStatusCode(), HttpStatus.OK);
+		assertEquals(customerController.updateCustomer(foo, customer).getStatusCode(), HttpStatus.OK);
 	}
 	
 	@Test
 	public void deleteCustomerTestWhenCustomerIsNotPresent() {
 		when(customerService.getCustomerById(id)).thenReturn(null);
-		assertEquals(customerController.deleteCustomer(id).getStatusCode(), HttpStatus.BAD_REQUEST);
+		assertEquals(customerController.deleteCustomer(foo).getStatusCode(), HttpStatus.NOT_FOUND);
 	}
 	
 	@Test
 	public void deleteCustomerTestWhenCustomerIsPresent() {
 		when(customerService.getCustomerById(id)).thenReturn(customer);
-		assertEquals(customerController.deleteCustomer(id).getStatusCode(), HttpStatus.OK);
+		assertEquals(customerController.deleteCustomer(foo).getStatusCode(), HttpStatus.OK);
 	}
 }
